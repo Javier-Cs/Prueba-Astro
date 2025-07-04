@@ -19,7 +19,7 @@
         <label for="message">Mensaje: </label>
         <textarea id="message" name="mensaje" rows="5" required></textarea>
     </div>
-    <button type="submit">Enviar</button>
+    <button type="submit" id="submitButton">Enviar</button>
 </form>
 
 <style>
@@ -73,10 +73,15 @@ import FormularioTrabajo from "../pages/formularioTrabajo.astro";
 
     document.addEventListener('DOMContentLoaded', () => {
         const form = document.getElementById('contactForm') as HTMLFormElement | null;
+        const submitButton = document.getElementById('submitButton') as HTMLButtonElement | null;
 
-        if (form) {
+        if (form && submitButton) {
             form.addEventListener('submit', async (event) => {
                 event.preventDefault();
+
+                //
+                submitButton.disabled = true;
+                submitButton.textContent = 'Enviando...';
 
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData.entries());
@@ -108,6 +113,9 @@ import FormularioTrabajo from "../pages/formularioTrabajo.astro";
                 } catch (error) {
                     console.error('Error de red o CORS:', error);
                     alert('Error al contactar con el servidor. Por favor, inténtalo de nuevo más tarde.');
+                } finally{
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Enviar';
                 }
             });
         }
